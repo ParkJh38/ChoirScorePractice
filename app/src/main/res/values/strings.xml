@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ChoirScorePractice</string>
+    <string name="foundation_status">Your choir practice workspace. PDF import, pronunciation input, score recognition, and piano playback are planned and are not available yet.</string>
+    <string name="planned_features">Planned features\n\nPDF choral scores\nKorean pronunciation from TXT or pasted text\nOn-device score recognition\nDescant, Soprano, Alto, Tenor, and Bass parts\nWhole choir, solo, mute, focus, tempo, and repeat controls</string>
+</resources>
