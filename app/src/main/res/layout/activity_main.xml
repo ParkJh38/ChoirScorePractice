@@ -13,19 +13,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:accessibilityHeading="true" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/foundation_status"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/input_intro" />
+        <Button
+            android:id="@+id/select_pdf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/select_pdf" />
         <TextView
+            android:id="@+id/pdf_filename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_pdf"
+            android:textIsSelectable="true" />
+        <Button
+            android:id="@+id/import_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/planned_features"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/import_txt" />
+        <TextView
+            android:id="@+id/txt_filename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_txt"
+            android:textIsSelectable="true" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:labelFor="@id/pronunciation"
+            android:text="@string/pronunciation_label" />
+        <EditText
+            android:id="@+id/pronunciation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:importantForAutofill="no"
+            android:minLines="6"
+            android:saveEnabled="false" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/import_help" />
+        <ProgressBar
+            android:id="@+id/import_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/input_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>

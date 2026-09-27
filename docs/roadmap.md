@@ -1,12 +1,19 @@
 # Roadmap
 
-## 0 — Foundation (this change)
+## 0 — Foundation (completed)
 - Kotlin Android app and pure Kotlin core module, pinned build tooling and wrapper.
 - Placeholder home screen, choir role/note models, engine-neutral OMR contract.
 - Android ignore rules, project conventions, architecture, and verification instructions.
 - No OMR integration or audio implementation.
 
-## 1 — Local document and pronunciation workflow
+## 1a — Score and pronunciation input (implemented)
+- Local PDF/TXT system picker with MIME filters and displayed filenames.
+- Bounded strict UTF-8 import and direct editable Korean text, preserving Unicode and whitespace.
+- Retained session state across rotation, background I/O, and non-destructive import failures.
+- JVM Unicode tests and emulator instrumentation coverage.
+- No OMR or playback; PDF validation is limited to accessibility/header checks.
+
+## 1b — Durable local document workflow (next)
 - Import PDF using the document picker, validate/copy locally, and preview pages.
 - Import UTF-8 Korean TXT or accept pasted text with editing and local persistence.
 - Verify malformed/large PDFs, revoked URI access, Korean text/BOM handling, rotation, and process recreation.

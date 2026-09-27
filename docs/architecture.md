@@ -1,8 +1,12 @@
 # Architecture
 
-## Implemented foundation
+## Implemented input milestone
 
-`app` depends on `core`; `core` has no dependency on Android or an OMR SDK. The app uses a small platform Activity and XML resource layout to avoid committing to a large UI framework before the practice workflow is implemented. UI code does not perform recognition.
+`app` depends on `core`; `core` has no dependency on Android or an OMR SDK. The app uses AndroidX `ComponentActivity`, Activity Result contracts, a retained `InputViewModel`, and XML resources. `DocumentImporter` performs content-provider I/O on `Dispatchers.IO`. UI collection follows the Activity lifecycle; imports survive rotation and are cancelled when the ViewModel is cleared. There is no recognition in the input flow.
+
+The PDF/TXT buttons launch `ACTION_OPEN_DOCUMENT` with MIME filters and `EXTRA_LOCAL_ONLY`. PDF selection reads only the header and retains the URI and provider display name for the current session. This is not full PDF validation. TXT decoding lives in the Android-independent `PronunciationText` helper: strict UTF-8, at most 64 KiB, no trimming, normalization, line-ending conversion, or BOM removal. Invalid/oversized input fails without replacing the previous text or filename. Provider streams/cursors are closed with `use`. Missing display names use a visible fallback.
+
+The editor is disabled during imports to prevent concurrent edits from being overwritten. Inputs live in memory, not saved-state Bundles, so long pasted text does not risk exceeding Android transaction limits. Rotation retains all fields; process death or finishing the Activity clears the session. No persistable URI grants are acquired yet. Private copying, durable drafts, and restoring access are future work.
 
 `Score` contains separately identified parts, each with a label, role, and note events. Roles include Descant, Soprano, Alto, Tenor, Bass, and Unknown; multiple parts can have the same role. MIDI pitches and quarter-note beat timing provide a minimal engine-neutral playback representation. Invalid pitches and non-finite or non-positive durations are rejected. This is not yet a complete notation interchange model: meter, tempo maps, ties, repeats, provenance, and lyric alignment need explicit extension before real OMR integration.
 
@@ -23,7 +27,7 @@ flowchart TD
     Controls[Whole choir / solo / mute / focus / tempo / repeat] --> Timeline
 ```
 
-This diagram describes the target flow, not implemented functionality.
+This diagram describes the target flow. The picker and pronunciation editor are implemented; PDF copying, recognition, review, persistence, and playback remain planned.
 
 ## Import and recognition
 
@@ -45,4 +49,4 @@ Whole choir restores all parts; solo selects one audible part; mute excludes sel
 
 ## Storage and privacy
 
-Persist imported documents, pronunciation, reviewed scores, and practice settings locally once the repository layer exists. Do not log score contents or send them to services. The initial manifest has no network/storage permissions and disables backup; revisit explicit backup behavior only when persistence is designed. Keep engine artifacts and user data out of source control.
+Persist imported documents, pronunciation, reviewed scores, and practice settings locally once the repository layer exists. Do not log score contents or send them to services. The manifest has no network/storage permissions, disables backup, and excludes app data from Android 12+ cloud/device transfers; revisit explicit backup behavior only when persistence is designed. Keep engine artifacts and user data out of source control.

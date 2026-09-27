@@ -1,5 +1,18 @@
 <resources>
     <string name="app_name">ChoirScorePractice</string>
-    <string name="foundation_status">Your choir practice workspace. PDF import, pronunciation input, score recognition, and piano playback are planned and are not available yet.</string>
-    <string name="planned_features">Planned features\n\nPDF choral scores\nKorean pronunciation from TXT or pasted text\nOn-device score recognition\nDescant, Soprano, Alto, Tenor, and Bass parts\nWhole choir, solo, mute, focus, tempo, and repeat controls</string>
+    <string name="input_intro">Select a choral score and add Korean pronunciation. Score recognition and piano playback are not available yet.</string>
+    <string name="select_pdf">Select PDF score</string>
+    <string name="import_txt">Import pronunciation TXT</string>
+    <string name="no_pdf">No PDF selected</string>
+    <string name="no_txt">No TXT imported</string>
+    <string name="pdf_filename">PDF: %1$s</string>
+    <string name="txt_filename">TXT: %1$s</string>
+    <string name="unnamed_document">Unnamed document</string>
+    <string name="pronunciation_label">Korean pronunciation — type or paste below</string>
+    <string name="import_help">TXT must be UTF-8 and no larger than 64 KiB. Importing replaces the text above. Inputs are kept during screen rotation, but are not saved after the app session ends.</string>
+    <string name="pdf_error">Could not read this PDF. Choose an accessible PDF score.</string>
+    <string name="txt_error">Could not read this TXT. Choose an accessible pronunciation file.</string>
+    <string name="encoding_error">This TXT is not valid UTF-8. Save it as UTF-8 and try again.</string>
+    <string name="size_error">This TXT is too large. Choose a file no larger than 64 KiB.</string>
+    <string name="picker_error">No document picker is available on this device.</string>
 </resources>

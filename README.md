@@ -2,7 +2,9 @@
 
 An Android app foundation for offline choir practice, written in Kotlin and aimed at Samsung Galaxy devices.
 
-**Current state:** a launchable placeholder screen, Android-independent score models, and a replaceable on-device OMR interface. PDF import, Korean pronunciation input, recognition, and audio playback are not implemented. No HOMR or AGPL engine is included.
+**Current state:** select a local PDF score with the system document picker, import UTF-8 pronunciation TXT, or type/paste Korean pronunciation. Both filenames are displayed. Text is editable and kept exactly as decoded, without Unicode normalization or whitespace changes. Inputs survive screen rotation but are session-only: closing the screen or process death clears them. TXT import replaces the current text and accepts files up to 64 KiB; invalid UTF-8 and oversized files are rejected without changing existing input.
+
+PDF selection checks readability and the PDF header, retaining a session URI; full PDF validation, private copying, preview, persistence, OMR, and audio playback remain future work. Android-independent score models and the replaceable OMR interface remain intact. No HOMR, AGPL engine, or remote service is included.
 
 ## Open on macOS
 
@@ -21,7 +23,7 @@ Initial Gradle sync needs internet to download build dependencies; the app itsel
 ./gradlew :core:test :app:assembleDebug :app:lintDebug
 ```
 
-The APK is generated at `app/build/outputs/apk/debug/app-debug.apk`. Core tests use the host JVM; Android build/lint tasks require the SDK. On the emulator, verify launch, scrolling at large font sizes, rotation, system bar spacing, and that the screen accurately states that features are planned. Emulator results do not establish Galaxy inference performance or audio latency.
+The APK is generated at `app/build/outputs/apk/debug/app-debug.apk`. Core tests use the host JVM; Android build/lint tasks require the SDK. With an emulator running, also run `./gradlew :app:connectedDebugAndroidTest`. The instrumentation tests launch the real app, stub picker results with a test-only content provider, and check filename display, exact Korean text, editing, rotation, cancellation, and import failures. For the actual system picker and clipboard/keyboard checks, follow [input validation](docs/input-validation.md). Emulator results do not establish Galaxy inference performance or audio latency.
 
 ## Layout
 
@@ -33,4 +35,4 @@ docs/               Architecture, roadmap, and foundation verification notes
 AGENTS.md           Repository conventions
 ```
 
-See [architecture](docs/architecture.md), [roadmap](docs/roadmap.md), and [verification](docs/verification.md). The repository retains its [Apache 2.0 license](LICENSE).
+See [architecture](docs/architecture.md), [roadmap](docs/roadmap.md), [verification](docs/verification.md), and [third-party dependencies](docs/third-party.md). The repository retains its [Apache 2.0 license](LICENSE).

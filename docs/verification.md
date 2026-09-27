@@ -1,4 +1,19 @@
-# Foundation verification
+# Verification history
+
+## Score and pronunciation input — 2026-09-28
+
+Verified on macOS with SDK Platform 35 / Build Tools 35.0.0 and the running `Medium_Phone` ARM64 Android 15 (API 35) emulator.
+
+- `./gradlew :core:test :app:assembleDebug :app:lintDebug`: passed. All three tasks also passed in the final combined run with `:app:connectedDebugAndroidTest`.
+- Core: 6 tests passed (4 text import tests, 2 existing note model tests).
+- Emulator instrumentation: 4 tests passed, covering filenames, exact Korean Unicode/BOM/CRLF, direct editing and Android clipboard paste, Activity recreation, cancellation, malformed/oversized TXT, and rejected PDF headers without losing prior selections.
+- Real DocumentsUI smoke test: launched the app, selected a synthetic local PDF from Downloads, then selected a UTF-8 TXT. Both filenames and Korean text with decomposed Jamo, leading spaces, and blank lines appeared correctly. MIME filtering enabled only the relevant file type in each picker.
+- Lint: 0 errors. Icon, backup configuration, and editor label findings fixed. Remaining 24 warnings are version-update advisories only (`GradleDependency` / `AndroidGradlePluginVersion`); pinned SDK 35-compatible tooling remains intentional.
+- `git diff --check`: passed. Local SDK configuration and generated APK/build output remain ignored.
+
+Limitations: API 26 and physical Galaxy devices were not exercised. TalkBack, large-font layouts, and Korean IME composition were not manually validated. State survives rotation but is session-only; process-death recovery/persistence and full PDF validation/preview remain future work. No OMR or playback was added or claimed tested.
+
+## Foundation — 2026-09-26 (historical)
 
 Verified on macOS on 2026-09-26 with OpenJDK 21.0.3.
 
@@ -11,7 +26,7 @@ Verified on macOS on 2026-09-26 with OpenJDK 21.0.3.
 - Ignore checks passed for local SDK configuration, IDE metadata, build output, Gradle/Kotlin caches, and signing keys.
 - Whitespace diff checks passed before commit. No OMR SDK, model, HOMR, or AGPL code was added.
 
-## Pending environment-dependent verification
+### Environment-dependent verification pending at foundation time
 
 `./gradlew :core:test :app:assembleDebug :app:lintDebug` stopped while determining Android task dependencies because no Android SDK location was configured. Core tests were then run separately and passed. Android APK compilation and lint are **not verified**.
 
