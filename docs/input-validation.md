@@ -9,7 +9,7 @@
 
 Core tests cover exact Unicode (precomposed Hangul, decomposed Jamo, supplementary characters, BOM), whitespace/CRLF preservation, empty input, the 64 KiB boundary, malformed UTF-8, and oversized input. Existing score timing tests remain part of the suite.
 
-Instrumentation launches the real Activity and uses intercepted SAF results plus a test-only provider with synthetic data. It covers filenames, imported and directly entered/pasted Korean text, subsequent edits, recreation, picker cancellation, malformed UTF-8, oversized TXT, and PDF header failures. The provider is included only in the test APK. Its PDF fixture checks selection/header handling, not PDF rendering.
+Instrumentation launches the real Activity and uses intercepted SAF results plus a test-only provider with synthetic data. It covers filenames, imported and directly entered/pasted Korean text, subsequent edits, recreation, picker cancellation, malformed UTF-8, oversized TXT, and PDF opening failures. The provider is included only in the test APK. Its PDF fixtures are generated locally with Android PdfDocument; viewer tests check rendered content as well as selection.
 
 ## Manual system picker smoke test
 
@@ -21,4 +21,4 @@ Instrumentation launches the real Activity and uses intercepted SAF results plus
 6. Import malformed UTF-8 or a TXT larger than 64 KiB. Verify an actionable error and unchanged previous text/filename.
 7. Check large font sizes, scrolling, TalkBack labels, and keyboard/system bar spacing.
 
-The UI explicitly states that TXT import replaces current text and that data is session-only. Process-death recovery, reopening saved documents, PDF preview, OMR, audio playback, and Galaxy hardware behavior are outside this milestone.
+The UI explicitly states that TXT import replaces current text and pronunciation remains session-only. The PDF viewer milestone adds last-PDF reopening and preview; see [viewer validation](pdf-viewer-validation.md). Pronunciation process-death recovery, OMR, audio playback, and Galaxy hardware behavior remain unimplemented or unverified.

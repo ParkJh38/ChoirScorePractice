@@ -1,5 +1,16 @@
 # Verification history
 
+## PDF score viewer — 2026-09-28
+
+- Required `./gradlew :core:test :app:assembleDebug :app:lintDebug` checks passed; the final combined run also included `:app:connectedDebugAndroidTest`.
+- Core: all 6 tests passed. Emulator: all 10 tests passed on `Medium_Phone`, Android 15 / API 35, ARM64.
+- Viewer coverage includes rendered pixel content on a 24-page mixed-geometry PDF, scrolling/recycling, capped allocation dimensions, zoom/horizontal pan, page/zoom retention across recreation, unavailable-file recovery, stored URI/read-grant reopening, revoked access, and returning to unchanged Korean text. Existing input regression tests also passed.
+- Real DocumentsUI smoke check: selected a synthetic local three-page score; inspected the rendered score, exercised zoom and touch panning/vertical scrolling, and confirmed persistent access and the selected filename after force-stopping/relaunching the app.
+- Lint: zero errors and no functional/style findings. The 24 remaining warnings are existing dependency/plugin version-update advisories. RecyclerView’s pinned dependency and Apache 2.0 POM license were reviewed.
+- No OMR or remote service was added. Generated APKs, local SDK settings, screenshots, and synthetic manual-test PDFs are not committed.
+
+Known limits and repeatable checks are in [PDF viewer validation](pdf-viewer-validation.md). Galaxy hardware, API 26, native-memory performance, and exhaustive PDF compatibility were not tested.
+
 ## Score and pronunciation input — 2026-09-28
 
 Verified on macOS with SDK Platform 35 / Build Tools 35.0.0 and the running `Medium_Phone` ARM64 Android 15 (API 35) emulator.

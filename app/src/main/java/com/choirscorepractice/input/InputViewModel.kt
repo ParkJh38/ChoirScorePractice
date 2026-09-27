@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-enum class InputError { PDF, TEXT, ENCODING, SIZE, PICKER }
+enum class InputError { PDF, PDF_REOPEN, TEXT, ENCODING, SIZE, PICKER }
 
 data class InputState(
     val pdf: SelectedPdf? = null,
@@ -28,8 +28,30 @@ data class InputState(
 /** Session state survives rotation. No large document/text payloads go into saved-state Bundles. */
 class InputViewModel(application: Application) : AndroidViewModel(application) {
     private val importer = DocumentImporter(application.contentResolver)
-    private val mutableState = MutableStateFlow(InputState())
+    private val store = SelectedPdfStore(application)
+    private val mutableState = MutableStateFlow(InputState(busy = true))
     val state = mutableState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            try {
+                val restored = withContext(Dispatchers.IO) {
+                    store.savedUri()?.let {
+                        if (!store.hasPersistedAccess(it)) throw IOException("PDF permission revoked")
+                        importer.selectPdf(it).copy(persisted = true)
+                    }
+                }
+                mutableState.value = mutableState.value.copy(pdf = restored)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                withContext(Dispatchers.IO) { store.forget() }
+                fail(InputError.PDF_REOPEN)
+            } finally {
+                mutableState.value = mutableState.value.copy(busy = false)
+            }
+        }
+    }
 
     fun editPronunciation(text: String) {
         if (!mutableState.value.busy) {
@@ -42,7 +64,7 @@ class InputViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun selectPdf(uri: Uri) = importDocument(InputError.PDF) {
-        val pdf = withContext(Dispatchers.IO) { importer.selectPdf(uri) }
+        val pdf = withContext(Dispatchers.IO) { store.remember(importer.selectPdf(uri)) }
         mutableState.value = mutableState.value.copy(pdf = pdf)
     }
 

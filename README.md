@@ -2,9 +2,11 @@
 
 An Android app foundation for offline choir practice, written in Kotlin and aimed at Samsung Galaxy devices.
 
-**Current state:** select a local PDF score with the system document picker, import UTF-8 pronunciation TXT, or type/paste Korean pronunciation. Both filenames are displayed. Text is editable and kept exactly as decoded, without Unicode normalization or whitespace changes. Inputs survive screen rotation but are session-only: closing the screen or process death clears them. TXT import replaces the current text and accepts files up to 64 KiB; invalid UTF-8 and oversized files are rejected without changing existing input.
+**Current state:** select a local PDF score with the system document picker, import UTF-8 pronunciation TXT, or type/paste Korean pronunciation. Both filenames are displayed. Text is editable and kept exactly as decoded, without Unicode normalization or whitespace changes. Pronunciation survives screen rotation but remains session-only; finishing the input screen or process death clears it. TXT import replaces the current text and accepts files up to 64 KiB; invalid UTF-8 and oversized files are rejected without changing existing input.
 
-PDF selection checks readability and the PDF header, retaining a session URI; full PDF validation, private copying, preview, persistence, OMR, and audio playback remain future work. Android-independent score models and the replaceable OMR interface remain intact. No HOMR, AGPL engine, or remote service is included.
+Choose **View PDF score** after selecting a PDF to read it inside the app. Pages scroll vertically; **Zoom in**, **Zoom out**, and **Fit width** provide 100–300% zoom, with sideways dragging when zoomed. Pages render on demand in the background with capped bitmap sizes.
+
+PDF selection validates that Android can open the document and its first page. The last PDF URI and read permission are retained when the provider supports persistence, allowing it to reopen next session. The UI identifies session-only access, and unavailable/revoked documents can be selected again. No PDF copy is uploaded or created remotely. Password-protected or non-seekable PDFs are not supported; very high zoom may look softer because raster resolution is capped. OMR and audio playback remain future work. Android-independent score models and the replaceable OMR interface remain intact. No HOMR, AGPL engine, or remote service is included.
 
 ## Open on macOS
 
@@ -23,7 +25,7 @@ Initial Gradle sync needs internet to download build dependencies; the app itsel
 ./gradlew :core:test :app:assembleDebug :app:lintDebug
 ```
 
-The APK is generated at `app/build/outputs/apk/debug/app-debug.apk`. Core tests use the host JVM; Android build/lint tasks require the SDK. With an emulator running, also run `./gradlew :app:connectedDebugAndroidTest`. The instrumentation tests launch the real app, stub picker results with a test-only content provider, and check filename display, exact Korean text, editing, rotation, cancellation, and import failures. For the actual system picker and clipboard/keyboard checks, follow [input validation](docs/input-validation.md). Emulator results do not establish Galaxy inference performance or audio latency.
+The APK is generated at `app/build/outputs/apk/debug/app-debug.apk`. Core tests use the host JVM; Android build/lint tasks require the SDK. With an emulator running, also run `./gradlew :app:connectedDebugAndroidTest`. The instrumentation tests launch the real app, stub picker results with a test-only content provider, and check filename display, exact Korean text, editing, rotation, cancellation, import failures, multi-page rendering, zoom/pan, and persisted access. For the actual system picker and clipboard/keyboard checks, follow [input validation](docs/input-validation.md) and [PDF viewer validation](docs/pdf-viewer-validation.md). Emulator results do not establish Galaxy inference performance or audio latency.
 
 ## Layout
 

@@ -9,6 +9,7 @@ androidx-test = "1.6.2"
 espresso = "3.6.1"
 
 [libraries]
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.4.0" }
 androidx-test-core = { module = "androidx.test:core", version = "1.6.1" }
 androidx-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espresso" }
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }

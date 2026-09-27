@@ -7,6 +7,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Button
+import androidx.test.platform.app.InstrumentationRegistry
+import com.choirscorepractice.input.SelectedPdfStore
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -29,12 +34,15 @@ class InputScreenTest {
     private lateinit var scenario: ActivityScenario<MainActivity>
 
     @Before fun launch() {
+        SelectedPdfStore(InstrumentationRegistry.getInstrumentation().targetContext).forget()
         Intents.init()
         scenario = ActivityScenario.launch(MainActivity::class.java)
+        awaitReady()
     }
 
     @After fun close() {
         scenario.close()
+        SelectedPdfStore(InstrumentationRegistry.getInstrumentation().targetContext).forget()
         Intents.release()
     }
 
@@ -91,6 +99,45 @@ class InputScreenTest {
         pick(R.id.select_pdf, "application/pdf", "invalid.pdf")
         awaitText(R.id.input_error, "Could not read this PDF. Choose an accessible PDF score.")
         awaitText(R.id.pdf_filename, "PDF: 합창.pdf")
+    }
+
+    @Test fun selectedPdfOpensViewerAndReturningPreservesPronunciation() {
+        pick(R.id.select_pdf, "application/pdf", "합창.pdf")
+        awaitText(R.id.pdf_filename, "PDF: 합창.pdf")
+        scenario.onActivity { it.findViewById<EditText>(R.id.pronunciation).setText(FixtureProvider.KOREAN) }
+        onView(withId(R.id.view_pdf)).perform(scrollTo(), click())
+        onView(withId(R.id.viewer_filename)).check(matches(withText("합창.pdf")))
+        onView(withId(R.id.close_viewer)).perform(click())
+        awaitText(R.id.pronunciation, FixtureProvider.KOREAN)
+        awaitText(R.id.pdf_filename, "PDF: 합창.pdf")
+    }
+
+    @Test fun persistedPdfReopensInNewSessionAndRevokedPermissionShowsRecovery() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        context.contentResolver.call(FixtureProvider.uri("합창.pdf"), "grant", "합창.pdf", null)
+        pick(R.id.select_pdf, "application/pdf", "합창.pdf")
+        awaitText(R.id.pdf_access_status, "This PDF can reopen next time while the file remains available.")
+        scenario.close()
+        scenario = ActivityScenario.launch(MainActivity::class.java)
+        awaitReady()
+        awaitText(R.id.pdf_filename, "PDF: 합창.pdf")
+        scenario.close()
+        context.contentResolver.call(FixtureProvider.uri("합창.pdf"), "revoke", "합창.pdf", null)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
+        awaitReady()
+        awaitText(R.id.pdf_filename, "No PDF selected")
+        awaitText(R.id.input_error, "The last PDF is no longer accessible. Select the score again.")
+    }
+
+    private fun awaitReady() {
+        val deadline = System.nanoTime() + 5_000_000_000L
+        var ready = false
+        do {
+            scenario.onActivity { ready = it.findViewById<Button>(R.id.select_pdf).isEnabled }
+            if (ready) return
+            Thread.sleep(25)
+        } while (System.nanoTime() < deadline)
+        org.junit.Assert.assertTrue("Input screen ready", ready)
     }
 
     private fun pick(button: Int, mime: String, name: String) {

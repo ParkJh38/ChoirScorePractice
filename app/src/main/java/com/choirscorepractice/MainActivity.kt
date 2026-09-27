@@ -15,6 +15,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.choirscorepractice.pdf.PdfViewerActivity
 import com.choirscorepractice.input.InputError
 import com.choirscorepractice.input.InputState
 import com.choirscorepractice.input.InputViewModel
@@ -41,6 +42,14 @@ class MainActivity : ComponentActivity() {
         }
         findViewById<Button>(R.id.select_pdf).setOnClickListener {
             launchPicker { pdfPicker.launch(arrayOf("application/pdf")) }
+        }
+        findViewById<Button>(R.id.view_pdf).setOnClickListener {
+            model.state.value.pdf?.let { pdf ->
+                startActivity(Intent(this, PdfViewerActivity::class.java).apply {
+                    data = pdf.uri
+                    putExtra(PdfViewerActivity.EXTRA_NAME, pdf.name)
+                })
+            }
         }
         findViewById<Button>(R.id.import_txt).setOnClickListener {
             launchPicker { txtPicker.launch(arrayOf("text/plain")) }
@@ -75,6 +84,11 @@ class MainActivity : ComponentActivity() {
             pronunciation.setSelection(pronunciation.length())
             rendering = false
         }
+        findViewById<Button>(R.id.view_pdf).isEnabled = state.pdf != null && !state.busy
+        findViewById<TextView>(R.id.pdf_access_status).apply {
+            visibility = if (state.pdf == null) View.GONE else View.VISIBLE
+            setText(if (state.pdf?.persisted == true) R.string.pdf_access_saved else R.string.pdf_access_session)
+        }
         pronunciation.isEnabled = !state.busy
         findViewById<Button>(R.id.select_pdf).isEnabled = !state.busy
         findViewById<Button>(R.id.import_txt).isEnabled = !state.busy
@@ -87,6 +101,7 @@ class MainActivity : ComponentActivity() {
 
     private fun InputError.messageResource(): Int = when (this) {
         InputError.PDF -> R.string.pdf_error
+        InputError.PDF_REOPEN -> R.string.pdf_reopen_error
         InputError.TEXT -> R.string.txt_error
         InputError.ENCODING -> R.string.encoding_error
         InputError.SIZE -> R.string.size_error

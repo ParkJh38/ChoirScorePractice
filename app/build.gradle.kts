@@ -26,6 +26,7 @@ kotlin {
 dependencies {
     implementation(project(":core"))
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.runtime)
     androidTestImplementation(libs.androidx.test.runner)

@@ -11,10 +11,19 @@
 - Bounded strict UTF-8 import and direct editable Korean text, preserving Unicode and whitespace.
 - Retained session state across rotation, background I/O, and non-destructive import failures.
 - JVM Unicode tests and emulator instrumentation coverage.
-- No OMR or playback; PDF validation is limited to accessibility/header checks.
+- No OMR or playback. PDF opening validation and viewing were added in milestone 1b.
 
-## 1b — Durable local document workflow (next)
-- Import PDF using the document picker, validate/copy locally, and preview pages.
+## 1b — PDF score viewer (implemented)
+- In-app multi-page vertical viewer using platform PdfRenderer and recycled page rows.
+- Discrete zoom and horizontal pan; background serialized rendering with bounded bitmaps.
+- Preserve selection, page, and zoom across Activity recreation.
+- Persist the last PDF URI/read permission when supported; handle revoked/unavailable access.
+- Emulator rendering, scrolling, zoom, recreation, permission, and input regression tests.
+- No OMR, upload, or remote services.
+
+## 1c — Durable local practice workspace (next)
+- Add app-private copies if needed for provider independence and eventual OMR.
+- Evaluate non-seekable provider support and higher-resolution tiled rendering.
 - Import UTF-8 Korean TXT or accept pasted text with editing and local persistence.
 - Verify malformed/large PDFs, revoked URI access, Korean text/BOM handling, rotation, and process recreation.
 - Exit: a user can reopen a local score and its pronunciation without network access.

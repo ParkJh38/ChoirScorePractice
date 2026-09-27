@@ -9,10 +9,26 @@
     <string name="txt_filename">TXT: %1$s</string>
     <string name="unnamed_document">Unnamed document</string>
     <string name="pronunciation_label">Korean pronunciation — type or paste below</string>
-    <string name="import_help">TXT must be UTF-8 and no larger than 64 KiB. Importing replaces the text above. Inputs are kept during screen rotation, but are not saved after the app session ends.</string>
+    <string name="import_help">TXT must be UTF-8 and no larger than 64 KiB. Importing replaces the text above. Pronunciation is kept during screen rotation, but is not saved after the app session ends.</string>
     <string name="pdf_error">Could not read this PDF. Choose an accessible PDF score.</string>
     <string name="txt_error">Could not read this TXT. Choose an accessible pronunciation file.</string>
     <string name="encoding_error">This TXT is not valid UTF-8. Save it as UTF-8 and try again.</string>
     <string name="size_error">This TXT is too large. Choose a file no larger than 64 KiB.</string>
     <string name="picker_error">No document picker is available on this device.</string>
+    <string name="view_pdf">View PDF score</string>
+    <string name="pdf_access_saved">This PDF can reopen next time while the file remains available.</string>
+    <string name="pdf_access_session">This provider allows access for this session only. Select the PDF again next time.</string>
+    <string name="pdf_reopen_error">The last PDF is no longer accessible. Select the score again.</string>
+    <string name="back_to_inputs">Back to score and pronunciation</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
+    <string name="zoom_fit">Fit width</string>
+    <plurals name="pdf_viewer_status">
+        <item quantity="one">%1$d page · %2$d%%</item>
+        <item quantity="other">%1$d pages · %2$d%%</item>
+    </plurals>
+    <string name="pdf_page_number">Score page %1$d</string>
+    <string name="viewer_help">Scroll vertically through pages. Zoom in, then drag sideways to read across the score.</string>
+    <string name="viewer_error">Could not open this PDF. It may be unavailable, damaged, password-protected, or unsupported. Go back and select another score.</string>
+    <string name="retry_page">Could not display page. Tap to retry.</string>
 </resources>
